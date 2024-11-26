@@ -1,0 +1,52 @@
+##LINEAR REGRESSION#################################
+height <- c(150, 160, 170, 180, 190)
+weight <- c(50, 60, 70, 80, 90)
+model <- lm(weight ~ height)
+plot(height, weight, main = "Height vs. Weight",
+     xlab = "Height (cm)", ylab = "Weight (kg)", pch = 16)
+abline(model, col = "red")
+
+
+###MULTIPLE REGRESSION##################################################
+set.seed(123)
+age <- c(25, 30, 35, 40, 45)  
+height_multi <- c(150, 160, 170, 180, 190) 
+weight_multi <- c(50, 60, 65, 75, 85) 
+multiple_model <- lm(weight_multi ~ height_multi + age)
+summary(multiple_model)
+library(ggplot2)
+ggplot(data = data.frame(weight_multi, fitted = fitted(multiple_model)), aes(x = fitted, y = weight_multi)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +
+  ggtitle("Multiple Regression: Residuals vs Fitted Values") +
+  theme_minimal()
+
+###LOGISTIC REGRESION##########################################################
+age <- c(20, 30, 40, 50, 60)
+buy <- c(0, 1, 0, 1, 1) 
+model <- glm(buy ~ age, family = binomial)
+summary(model)
+predicted_probs <- predict(model, newdata = data.frame(age = c(25, 35)), type = "response")
+print(predicted_probs)
+age_seq <- seq(min(age), max(age), length.out = 100)
+fitted_probs <- predict(model, newdata = data.frame(age = age_seq), type = "response")
+plot(age, buy, main = "Logistic Regression: Age vs. Buying",
+     xlab = "Age", ylab = "Buying Probability", pch = 16, col = "blue", ylim = c(0, 1))
+lines(age_seq, fitted_probs, col = "red", lwd = 2)
+
+##POISSION REGRESSION########################################################
+set.seed(123)
+height <- c(45, 56, 75, 89, 35, 67)
+exercises <- rpois(length(height), lambda = exp(0.05 * height))
+poisson_model <- glm(exercises ~ height, family = poisson)
+summary(poisson_model)
+library(ggplot2)
+ggplot(data = data.frame(height, exercises), aes(x = height, y = exercises)) +
+  geom_point(aes(color = exercises)) +
+  geom_smooth(method = "glm", method.args = list(family = "poisson"), color = "blue") +
+  ggtitle("Poisson Regression: Exercises per Week vs Height") +
+  theme_minimal()
+
+
+
+
