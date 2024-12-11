@@ -13,6 +13,5 @@ y <- qnorm(x, mean = 2, sd = 1)
 plot(x,y)
 
 y <- rnorm(50)
-png(file = "rnorm.png")
 hist(y, main = "Normal DIstribution")
 
