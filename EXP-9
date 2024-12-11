@@ -1,4 +1,4 @@
-##LINEAR REGRESSION#################################
+## LINEAR REGRESSION ###
 height <- c(150, 160, 170, 180, 190)
 weight <- c(50, 60, 70, 80, 90)
 model <- lm(weight ~ height)
@@ -7,21 +7,17 @@ plot(height, weight, main = "Height vs. Weight",
 abline(model, col = "red")
 
 
-###MULTIPLE REGRESSION##################################################
-set.seed(123)
-age <- c(25, 30, 35, 40, 45)  
-height_multi <- c(150, 160, 170, 180, 190) 
-weight_multi <- c(50, 60, 65, 75, 85) 
-multiple_model <- lm(weight_multi ~ height_multi + age)
-summary(multiple_model)
-library(ggplot2)
-ggplot(data = data.frame(weight_multi, fitted = fitted(multiple_model)), aes(x = fitted, y = weight_multi)) +
-  geom_point() +
-  geom_smooth(method = "lm", color = "blue", se = FALSE) +
-  ggtitle("Multiple Regression: Residuals vs Fitted Values") +
-  theme_minimal()
+## MULTIPLE REGRESSION ####
+input<-mtcars[,c("mpg","wt","hp","disp")]
+model<-lm(mpg~wt+hp+disp,data=input)
+print(model)
+plot(model)
+output>>>>>
+Coefficients:
+(Intercept)           wt         disp           hp  
+  37.105505    -3.800891    -0.000937    -0.031157
 
-###LOGISTIC REGRESION##########################################################
+### LOGISTIC REGRESION ####
 age <- c(20, 30, 40, 50, 60)
 buy <- c(0, 1, 0, 1, 1) 
 model <- glm(buy ~ age, family = binomial)
@@ -31,22 +27,36 @@ print(predicted_probs)
 age_seq <- seq(min(age), max(age), length.out = 100)
 fitted_probs <- predict(model, newdata = data.frame(age = age_seq), type = "response")
 plot(age, buy, main = "Logistic Regression: Age vs. Buying",
-     xlab = "Age", ylab = "Buying Probability", pch = 16, col = "blue", ylim = c(0, 1))
-lines(age_seq, fitted_probs, col = "red", lwd = 2)
+     xlab = "Age", ylab = "Buying Probability", col = "blue")
+lines(age_seq, fitted_probs, col = "red")
+output>>>>>>>>>>>>>>>>>
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept) -3.73901    3.71955  -1.005    0.315
+age          0.10904    0.09748   1.119    0.263
+(Dispersion parameter for binomial family taken to be 1)
+    Null deviance: 6.7301  on 4  degrees of freedom
+Residual deviance: 4.8439  on 3  degrees of freedom
+AIC: 8.8439
+Number of Fisher Scoring iterations: 4     
+1         2 
+0.2664033 0.5193596
 
-##POISSION REGRESSION########################################################
-set.seed(123)
-height <- c(45, 56, 75, 89, 35, 67)
-exercises <- rpois(length(height), lambda = exp(0.05 * height))
-poisson_model <- glm(exercises ~ height, family = poisson)
-summary(poisson_model)
-library(ggplot2)
-ggplot(data = data.frame(height, exercises), aes(x = height, y = exercises)) +
-  geom_point(aes(color = exercises)) +
-  geom_smooth(method = "glm", method.args = list(family = "poisson"), color = "blue") +
-  ggtitle("Poisson Regression: Exercises per Week vs Height") +
-  theme_minimal()
+## POISSION REGRESSION #######
+input<-warpbreaks
+print(head(input))
+output<-glm(formula=breaks~wool+tension,data=input,family=poission)
+print(summary(output))
+plot(output)
 
+output>>>>>>>>>>>>>
+glm(formula = breaks ~ wool + tension, family = poisson, data = warpbreaks)
 
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  3.69196    0.04541  81.302  < 2e-16 ***
+woolB       -0.20599    0.05157  -3.994 6.49e-05 ***
+tensionM    -0.32132    0.06027  -5.332 9.73e-08 ***
+tensionH    -0.51849    0.06396  -8.107 5.21e-16 ***
 
 
